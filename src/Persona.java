@@ -36,6 +36,11 @@ private String Pais;
         Pais = pais;
     }
 
+    @Override
+    public String toString() {
+        return "Persona{" + "Id=" + Id + ", Nombre='" + Nombre + '\'' + ", Apellido='" + Apellido + '\'' + ", Pais='" + Pais + '\'' + '}';
+    }
+
     public Persona(int id, String nombre, String apellido, String pais) {
         Id = id;
         Nombre = nombre;
