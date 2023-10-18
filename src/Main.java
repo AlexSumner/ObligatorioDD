@@ -16,7 +16,7 @@ public class Main {
             System.out.println("1. Alta de Jugador/Árbitro.");
             System.out.println("2. Lista de Jugadores.");
             System.out.println("3. Lista de Árbitros.");
-
+            System.out.println("4. Modificar Persona");
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
@@ -30,6 +30,10 @@ public class Main {
                 }
                 case 3:{
                     listarArbitros();
+                    break;
+                }
+                case 4 :{
+                    modificarPersona();
                     break;
                 }
                 default:{
@@ -107,7 +111,41 @@ public class Main {
         }
         return false;
     }
+    public static boolean modificarPersona(){
+            System.out.println("Seleccione un ID de persona que desea modificar");
+            int opcion = Integer.parseInt(entrada.nextLine());
 
+            for (Persona unaPersona : personas){
+                if (unaPersona.getId() == opcion){
+                    System.out.println("Ingrese un nuevo nombre: ");
+                    String nombre = entrada.nextLine();
+                    System.out.println("Ingrese un nuevo apellido: ");
+                    String apellido = entrada.nextLine();
+                    System.out.println("Ingrese un nuevo pais: ");
+                    String pais = entrada.nextLine();
+                    if (unaPersona instanceof Jugador ){
+                        System.out.println("Ingrese un nuevo valor de elo: ");
+                        short elo = Short.parseShort(entrada.nextLine());
+                        System.out.println("Ingrese una nueva edad: ");
+                        short edad = Short.parseShort(entrada.nextLine());
+                        ((Jugador) unaPersona).setElo(elo);
+                        ((Jugador) unaPersona).setEdad(edad);
+                    }else if (unaPersona instanceof Arbitro){
+                        System.out.println("Ingrese un nuevo Nivel de Certificacion: ");
+                        short Nvl_Certificacion = Short.parseShort(entrada.nextLine());
+                        ((Arbitro) unaPersona).setNvl_Certificacion(Nvl_Certificacion);
+                    }
+                    unaPersona.setNombre(nombre);
+                    unaPersona.setApellido(apellido);
+                    unaPersona.setPais(pais);
+                }
+                System.out.println("Persona modificada: "+unaPersona);
+                return true;
+            }
+        System.out.println("No se encontro persona con ese numero de ID!!");
+            return false;
+    }
+    //#region "Metodos Auxiliares"
     public static void listarJugadores(){
         for(Persona unaPersona : personas){
             if(unaPersona instanceof Jugador){
@@ -124,4 +162,5 @@ public class Main {
             }
         }
     }
+    //#endregion
 }
