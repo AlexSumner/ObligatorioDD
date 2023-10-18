@@ -16,7 +16,8 @@ public class Main {
             System.out.println("1. Alta de Jugador/Árbitro.");
             System.out.println("2. Lista de Jugadores.");
             System.out.println("3. Lista de Árbitros.");
-            System.out.println("4. Modificar Persona");
+            System.out.println("4. Modificar Jugadores/Arbitros");
+            System.out.println("5. Baja Jugadores/Arbitros");
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
@@ -34,6 +35,10 @@ public class Main {
                 }
                 case 4 :{
                     modificarPersona();
+                    break;
+                }
+                case 5 :{
+                    BajaPersona();
                     break;
                 }
                 default:{
@@ -125,7 +130,7 @@ public class Main {
                     String pais = entrada.nextLine();
                     if (unaPersona instanceof Jugador ){
                         System.out.println("Ingrese un nuevo valor de elo: ");
-                        short elo = Short.parseShort(entrada.nextLine());
+                        int elo = Integer.parseInt(entrada.nextLine());
                         System.out.println("Ingrese una nueva edad: ");
                         short edad = Short.parseShort(entrada.nextLine());
                         ((Jugador) unaPersona).setElo(elo);
@@ -161,6 +166,51 @@ public class Main {
                 System.out.println(arbitro);
             }
         }
+    }
+
+    public static void BajaPersona(){
+        System.out.println("Que desea eliminar, Jugadores (1) o Arbitro(2)");
+        short tipo = Short.parseShort(entrada.nextLine());
+        boolean comprobante = false;
+        if(tipo == 1){
+            System.out.println("Ingrese el id de el jugador a eliminar. Nos aseguraremos que no vuelva...");
+            int ideaso = Integer.parseInt(entrada.nextLine());
+            for(Persona unaPer : personas){
+                if(unaPer instanceof Jugador){
+                    if(unaPer.getId() == ideaso){
+                        personas.remove(unaPer);
+                        System.out.println("El jugador fue eliminado exitosamente a manos de Ding Liren");
+                        comprobante = true;
+                        break;
+                    }
+                }
+            }
+            if(!comprobante){
+                System.out.println("No se a encontrado a este jugador");
+            }
+        }
+        else if(tipo == 2){
+            System.out.println("Ingrese el id de el Arbitro a eliminar. Nos aseguraremos que no vuelva...");
+            int ideaso = Integer.parseInt(entrada.nextLine());
+            for(Persona unaPer : personas){
+                if(unaPer instanceof Arbitro){
+                    if(unaPer.getId() == ideaso){
+                        personas.remove(unaPer);
+                        System.out.println("El arbitro ha sido eliminado por Jhon Wick");
+                        comprobante = true;
+                        break;
+                    }
+                }
+            }
+            if(!comprobante){
+                System.out.println("No se encontro a este arbitro");
+            }
+
+        }
+        else{
+            System.out.println("boso nabo? salga de aca");
+        }
+
     }
     //#endregion
 }
