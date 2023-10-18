@@ -16,8 +16,6 @@ public class Arbitro extends Persona{
 
     @Override
     public String toString() {
-        return "Arbitro{" +
-                "Nvl_Certificacion=" + Nvl_Certificacion +
-                '}';
+        return "Arbitro{" +super.toString()+ "Nvl_Certificacion=" + Nvl_Certificacion + '}';
     }
 }
