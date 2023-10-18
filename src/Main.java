@@ -14,12 +14,22 @@ public class Main {
             System.out.println("Ingrese -1 para salir del programa.");
             System.out.println("** Seleccione la opción que desee: ");
             System.out.println("1. Alta de Jugador/Árbitro.");
+            System.out.println("2. Lista de Jugadores.");
+            System.out.println("3. Lista de Árbitros.");
 
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
                 case 1 :{
                     altaPersona();
+                    break;
+                }
+                case 2: {
+                    listarJugadores();
+                    break;
+                }
+                case 3:{
+                    listarArbitros();
                     break;
                 }
                 default:{
@@ -96,5 +106,22 @@ public class Main {
             }
         }
         return false;
+    }
+
+    public static void listarJugadores(){
+        for(Persona unaPersona : personas){
+            if(unaPersona instanceof Jugador){
+                Jugador jugador = (Jugador) unaPersona;
+                System.out.println(jugador);
+            }
+        }
+    }
+    public static void listarArbitros(){
+        for(Persona unaPersona : personas){
+            if(unaPersona instanceof Arbitro){
+                Arbitro arbitro = (Arbitro) unaPersona;
+                System.out.println(arbitro);
+            }
+        }
     }
 }
