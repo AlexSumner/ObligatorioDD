@@ -30,6 +30,8 @@ public class Main {
             System.out.println("10. Mostrar partidas de un jugador");
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
+            System.out.println("13. Mostrar cuanto ah cobrado un juez");
+            System.out.println("14. Mostrar cuanto ah cobrado un jugador");
             opcion = Integer.parseInt(entrada.nextLine());
             
             switch(opcion){
@@ -79,6 +81,14 @@ public class Main {
                 }
                 case 12: {
                     historialDePartidas();
+                    break;
+                }
+                case 13: {
+                    DineroJuez();
+                    break;
+                }
+                case 14: {
+                    DineroJugador();
                     break;
                 }
 
@@ -334,6 +344,7 @@ public class Main {
                                     tipo = "Internacional";
                                 }
                                 Partida unaPartida = new Partida(idPartida,jugadorUno,jugadorDos,unArbitro,fecha,tipo, (Jugador) ganador);
+                                controlElo(unaPartida);
                                 partidas.add(unaPartida);
                                 System.out.println(unaPartida.toString());
                             }else {
@@ -531,6 +542,76 @@ public class Main {
                 System.out.println("Fecha: "+unaPartida.getFecha()+" Resultado: "+unaPartida.getGanador());
             }
         }
+    }
+
+    private static void DineroJuez(){
+    try{
+
+
+        System.out.println("Ingrese la cedula de identidad de el juez");
+
+        int ci = Integer.parseInt(entrada.nextLine());
+        int total = 0;
+        for(Partida par: partidas){
+            if(par.getArbitro().getCi() == ci){
+                total += 500;
+            }
+        }
+
+        System.out.println("El total de dinero que ha cobrado este arbitro es: " + total);
+    }catch (Exception e){
+        System.out.println("A ocurrido un error en el codigo: " + e );
+    }
+    }
+
+    private static void DineroJugador(){
+        try{
+
+
+            System.out.println("Ingrese la cedula de identidad de el Jugador");
+
+            int ci = Integer.parseInt(entrada.nextLine());
+            int total = 0;
+            for(Partida par: partidas){
+                if(par.getJugador1().getCi() == ci || par.getJugador2().getCi() == ci){
+                    total += 600;
+                }
+            }
+
+            System.out.println("El total de dinero que ha cobrado este jugador es: " + total);
+        }catch (Exception e){
+            System.out.println("A ocurrido un error en el codigo: " + e );
+        }
+    }
+
+    public static void controlElo(Partida unaPartida){
+
+        Jugador Perdedor = null;
+        if(unaPartida.getGanador().getCi() == unaPartida.getJugador1().getCi()){
+            Perdedor = unaPartida.getJugador2();
+        }else {
+            Perdedor = unaPartida.getJugador1();
+        }
+
+
+        for(Persona unaPersona : personas){
+            if(unaPartida.getGanador().getCi() == unaPersona.getCi() ) {
+                Jugador unJuga = ((Jugador) unaPersona);
+                int eloGanador = unJuga.getElo();
+                int eloPerdedor = Perdedor.getElo();
+                int total = (eloGanador - eloPerdedor) / 4 ;
+                unJuga.setElo(eloGanador + total);
+                System.out.println("Elo ganador: " + unJuga.getElo());
+            } else if (Perdedor.getCi() == unaPersona.getCi()) {
+                Jugador unJuga = ((Jugador) unaPersona);
+                int eloGanador = unJuga.getElo();
+                int eloPerdedor = Perdedor.getElo();
+                int total = (eloGanador - eloPerdedor) / 8;
+                unJuga.setElo(eloGanador - total);
+                System.out.println("Elo perdedor: " + unJuga.getElo());
+            }
+        }
+
     }
     //#endregion
 }
