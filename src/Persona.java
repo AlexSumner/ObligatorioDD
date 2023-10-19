@@ -4,11 +4,11 @@ private String Nombre;
 private String Apellido;
 private String Pais;
 
-    public int getId() {
+    public int getCi() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setCi(int id) {
         Id = id;
     }
 
