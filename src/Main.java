@@ -81,7 +81,7 @@ public class Main {
             opcion = Integer.parseInt(entrada.nextLine());
 
             if(opcion == 1){
-                System.out.println("Ingrese un numero identificatorio:");
+                System.out.println("Ingrese Cedula de Identidad:");
                 int id = Integer.parseInt(entrada.nextLine());
 
                 System.out.println("Ingrese el nombre: ");
@@ -107,7 +107,7 @@ public class Main {
 
             } else if (opcion == 2) {
 
-                System.out.println("Ingrese un numero identificatorio:");
+                System.out.println("Ingrese Cedula de Identidad:");
                 int id = Integer.parseInt(entrada.nextLine());
 
                 System.out.println("Ingrese el nombre: ");
@@ -122,11 +122,13 @@ public class Main {
                 System.out.println("Ingrese el nivel de certificación (del 1 al 3): ");
                 short nvl_Certificacion = Short.parseShort(entrada.nextLine());
 
-                Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
-
-                personas.add(unArbitro);
-
-                System.out.println(unArbitro);
+                if (nvl_Certificacion >= 1 && nvl_Certificacion <= 3) {
+                    Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
+                    personas.add(unArbitro);
+                    System.out.println("Árbitro registrado con éxito: " + unArbitro);
+                } else {
+                    System.out.println("El nivel de certificación debe estar entre 1 y 3.");
+                }
 
                 return true;
             } else if (opcion != -1) {
@@ -144,13 +146,17 @@ public class Main {
                 if (unaPersona.getCi() == opcion){
                     System.out.println("Ingrese un nuevo nombre: ");
                     String nombre = entrada.nextLine();
+
                     System.out.println("Ingrese un nuevo apellido: ");
                     String apellido = entrada.nextLine();
+
                     System.out.println("Ingrese un nuevo pais: ");
                     String pais = entrada.nextLine();
+
                     if (unaPersona instanceof Jugador ){
                         System.out.println("Ingrese un nuevo valor de elo: ");
                         int elo = Integer.parseInt(entrada.nextLine());
+
                         System.out.println("Ingrese una nueva edad: ");
                         short edad = Short.parseShort(entrada.nextLine());
                         ((Jugador) unaPersona).setElo(elo);
@@ -197,6 +203,7 @@ public class Main {
         else if(tipo == 2){
             System.out.println("Ingrese el id de el Arbitro a eliminar. Nos aseguraremos que no vuelva...");
             int ideaso = Integer.parseInt(entrada.nextLine());
+
             for(Persona unaPer : personas){
                 if(unaPer instanceof Arbitro){
                     if(unaPer.getCi() == ideaso){
