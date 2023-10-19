@@ -31,7 +31,7 @@ public class Main {
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
             opcion = Integer.parseInt(entrada.nextLine());
-
+            
             switch(opcion){
                 case 1 :{
                     altaPersona();
@@ -66,9 +66,22 @@ public class Main {
                     break;
                 }
                 case 9 :{
-                    listarPartidas();
+                    listaPartidas();
                     break;
                 }
+                case 10: {
+                    MostrarPartidasJugador();
+                    break;
+                }
+                case 11: {
+                    MostrarPartidasFecha();
+                    break;
+                }
+                case 12: {
+                    historialDePartidas();
+                    break;
+                }
+
                 default:{
                     if(opcion != -1){
                         System.out.println("Ingrese una opción válida.");
@@ -78,6 +91,7 @@ public class Main {
         }
 
     }
+    //#region "ABM Persona"
     public static boolean altaPersona(){
         int opcion = 0;
 
@@ -258,6 +272,10 @@ public class Main {
             System.out.println("Opción no válida.");
         }
     }
+
+    //#endregion
+
+    //#region "ABM Partida"
     public static void AltaPartida(){
 
         System.out.println("Ingrese el nivel de la partida 1: Regional , 2: Nacional , 3: Internacional ");
@@ -329,10 +347,8 @@ public class Main {
         else {
             System.out.println("Ese nivel no existe en nuestros registros, debe ser 1 ,2 o 3");
         }
-
-
-
     }
+
     public static void ModificarPartida(){
         System.out.println("---MODIFICAR PARTIDA---");
         System.out.println("Ingresar un id de partida para modificar");
@@ -407,6 +423,10 @@ public class Main {
 
        }
     }
+    //#endregion
+
+
+
     //#region "Metodos Auxiliares"
     public static void listarJugadores(){
         for(Persona unaPersona : personas){
@@ -424,14 +444,10 @@ public class Main {
             }
         }
     }
-    public static void listarPartidas() {
-        System.out.println("Lista de partidas");
+    public static void listaPartidas() {
         for (Partida partida : partidas) {
             System.out.println(partida.toString());
         }
-    }
-    public static ArrayList<Partida> listaPartidas(){
-        return partidas;
     }
     private static Partida buscarPartida(int id){
         for (Partida unaPartida : partidas){
