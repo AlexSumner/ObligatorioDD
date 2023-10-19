@@ -5,6 +5,7 @@ import java.util.Date;
 public class Main {
     static Scanner entrada = new Scanner(System.in);
     static ArrayList<Persona> personas = new ArrayList<>();
+    static ArrayList<Partida> partidas = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -166,23 +167,8 @@ public class Main {
         System.out.println("No se encontro persona con ese numero de ID!!");
             return false;
     }
-    //#region "Metodos Auxiliares"
-    public static void listarJugadores(){
-        for(Persona unaPersona : personas){
-            if(unaPersona instanceof Jugador){
-                Jugador jugador = (Jugador) unaPersona;
-                System.out.println(jugador);
-            }
-        }
-    }
-    public static void listarArbitros(){
-        for(Persona unaPersona : personas){
-            if(unaPersona instanceof Arbitro){
-                Arbitro arbitro = (Arbitro) unaPersona;
-                System.out.println(arbitro);
-            }
-        }
-    }
+
+
 
     public static void BajaPersona(){
         System.out.println("Que desea eliminar, Jugadores (1) o Arbitro(2)");
