@@ -61,6 +61,10 @@ public class Main {
                     BajaPartida();
                     break;
                 }
+                case 9 :{
+                    listarPartidas();
+                    break;
+                }
                 default:{
                     if(opcion != -1){
                         System.out.println("Ingrese una opción válida.");
@@ -416,6 +420,12 @@ public class Main {
             }
         }
     }
+    public static void listarPartidas() {
+        System.out.println("Lista de partidas");
+        for (Partida partida : partidas) {
+            System.out.println(partida);
+        }
+    }
     public static ArrayList<Partida> listaPartidas(){
         return partidas;
     }
@@ -435,7 +445,6 @@ public class Main {
         }
         return null;
     }
-
     private static Arbitro buscarArbitro(int ci){
         for(Persona unaPer : personas){
             if(unaPer instanceof Arbitro && unaPer.getCi() == ci){
