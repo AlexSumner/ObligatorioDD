@@ -26,6 +26,10 @@ public class Main {
             System.out.println("6. Alta partidas");
             System.out.println("7. Modificar partidas");
             System.out.println("8. Baja partidas");
+            System.out.println("9. Mostrar listado de partidas");
+            System.out.println("10. Mostrar partidas de un jugador");
+            System.out.println("11. Mostrar partidas por fecha");
+            System.out.println("12. Mostrar historial del partida y resultado");
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
@@ -332,7 +336,7 @@ public class Main {
     public static void ModificarPartida(){
         System.out.println("---MODIFICAR PARTIDA---");
         System.out.println("Ingresar un id de partida para modificar");
-        System.out.println(listaPartidas());
+        System.out.println(partidas);
         int opcion = Integer.parseInt(entrada.nextLine());
         Partida porModificar = buscarPartida(opcion);
         if(porModificar != null){
@@ -423,7 +427,7 @@ public class Main {
     public static void listarPartidas() {
         System.out.println("Lista de partidas");
         for (Partida partida : partidas) {
-            System.out.println(partida);
+            System.out.println(partida.toString());
         }
     }
     public static ArrayList<Partida> listaPartidas(){
@@ -452,6 +456,65 @@ public class Main {
             }
         }
         return null;
+    }
+
+    private static void MostrarPartidasJugador(){
+
+        System.out.println("Ingrese la cedula de el jugador para ver su historial");
+        int ci = Integer.parseInt(entrada.nextLine());
+
+        Jugador jugador = null;
+
+        for (Persona unaPersona: personas){
+            if(unaPersona instanceof Jugador && unaPersona.getCi() == ci){
+                 jugador = (Jugador) unaPersona;
+            }
+        }
+        if(jugador != null){
+            System.out.println("Partidas del jugador "+ jugador.getNombre() + " " +jugador.getApellido());
+            for(Partida unaPartida: partidas){
+                if(unaPartida.getJugador1() != null && unaPartida.getJugador1().equals(jugador)){
+                    System.out.println(unaPartida);
+                }
+                if(unaPartida.getJugador2() != null && unaPartida.getJugador2().equals(jugador)){
+                    System.out.println(unaPartida);
+                }
+            }
+        }
+        else
+        {
+            System.out.println("No se encontro un jugador ni partidas con ese numero de cédula.");
+        }
+    }
+
+    private static void MostrarPartidasFecha() {
+        System.out.println("Ingrese la fecha de la partida en formato 00/00/0000 para ver las partidas jugadas en esa fecha");
+        String fechaStr = entrada.nextLine();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            Date fecha = dateFormat.parse(fechaStr);
+
+            for (Partida part : partidas) {
+                if (part.getFecha().equals(fecha)) {
+                    System.out.println(part);
+                    System.out.println("---------------------------------------------------------------------");
+                }
+            }
+        } catch (ParseException e) {
+            System.out.println("Fecha ingresada en formato incorrecto. Debe ser 00/00/0000.");
+        }
+    }
+
+
+    private static void historialDePartidas(){
+        System.out.println("Ingrese un ID partida");
+        int idPartida = Integer.parseInt(entrada.nextLine());
+        for(Partida unaPartida : partidas){
+            if(unaPartida.getId() == idPartida){
+                System.out.println("Fecha: "+unaPartida.getFecha()+" Resultado: "+unaPartida.getGanador());
+            }
+        }
     }
     //#endregion
 }
