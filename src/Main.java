@@ -1,4 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.Date;
 
@@ -116,7 +119,7 @@ public class Main {
                 System.out.println("Ingrese el pais: ");
                 String pais = entrada.nextLine();
 
-                System.out.println("Ingrese el nivel de certificación: ");
+                System.out.println("Ingrese el nivel de certificación (del 1 al 3): ");
                 short nvl_Certificacion = Short.parseShort(entrada.nextLine());
 
                 Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
