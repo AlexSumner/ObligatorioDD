@@ -75,6 +75,7 @@ public class Main {
 
         while(opcion != -1){
             System.out.println("Seleccione la persona que desea ingresar: ");
+            System.out.println("Ingrese -1 para salir.");
             System.out.println("1. Jugador");
             System.out.println("2. Árbitro");
 
@@ -176,55 +177,79 @@ public class Main {
         System.out.println("No se encontro persona con ese numero de ID!!");
             return false;
     }
-
-
-
-    public static void BajaPersona(){
-        System.out.println("Que desea eliminar, Jugadores (1) o Arbitro(2)");
+    public static void BajaPersona() {
+        System.out.println("¿Qué desea eliminar, Jugadores (1) o Árbitro (2)?");
         short tipo = Short.parseShort(entrada.nextLine());
         boolean comprobante = false;
-        if(tipo == 1){
-            System.out.println("Ingrese el id de el jugador a eliminar. Nos aseguraremos que no vuelva...");
-            int ideaso = Integer.parseInt(entrada.nextLine());
-            for(Persona unaPer : personas){
-                if(unaPer instanceof Jugador){
-                    if(unaPer.getCi() == ideaso){
+
+        if (tipo == 1) {
+            System.out.println("Ingrese el CI del jugador a eliminar. Nos aseguraremos de que no vuelva...");
+            int ciJugador = Integer.parseInt(entrada.nextLine());
+
+            // Verificar si el jugador está en una partida
+            boolean jugadorEnPartida = false;
+            for (Partida partida : partidas) {
+                if (partida.getJugador1() != null && partida.getJugador1().getCi() == ciJugador) {
+                    jugadorEnPartida = true;
+                    break;
+                }
+                if (partida.getJugador2() != null && partida.getJugador2().getCi() == ciJugador) {
+                    jugadorEnPartida = true;
+                    break;
+                }
+            }
+
+            if (jugadorEnPartida) {
+                System.out.println("No es posible eliminar al jugador, ya que está en una partida.");
+            } else {
+                // Eliminar el jugador si no está en una partida
+                for (Persona unaPer : personas) {
+                    if (unaPer instanceof Jugador && unaPer.getCi() == ciJugador) {
                         personas.remove(unaPer);
-                        System.out.println("El jugador fue eliminado exitosamente a manos de Ding Liren");
+                        System.out.println("El jugador fue eliminado exitosamente.");
                         comprobante = true;
                         break;
                     }
                 }
-            }
-            if(!comprobante){
-                System.out.println("No se a encontrado a este jugador");
-            }
-        }
-        else if(tipo == 2){
-            System.out.println("Ingrese el id de el Arbitro a eliminar. Nos aseguraremos que no vuelva...");
-            int ideaso = Integer.parseInt(entrada.nextLine());
 
-            for(Persona unaPer : personas){
-                if(unaPer instanceof Arbitro){
-                    if(unaPer.getCi() == ideaso){
+                if (!comprobante) {
+                    System.out.println("No se encontró a este jugador.");
+                }
+            }
+        } else if (tipo == 2) {
+            System.out.println("Ingrese el CI del árbitro a eliminar. Nos aseguraremos de que no vuelva...");
+            int ciArbitro = Integer.parseInt(entrada.nextLine());
+
+            // Verificar si el árbitro está en una partida
+            boolean arbitroEnPartida = false;
+            for (Partida partida : partidas) {
+                if (partida.getArbitro() != null && partida.getArbitro().getCi() == ciArbitro) {
+                    arbitroEnPartida = true;
+                    break;
+                }
+            }
+
+            if (arbitroEnPartida) {
+                System.out.println("No es posible eliminar al árbitro, ya que está en una partida.");
+            } else {
+                // Eliminar el árbitro si no está en una partida
+                for (Persona unaPer : personas) {
+                    if (unaPer instanceof Arbitro && unaPer.getCi() == ciArbitro) {
                         personas.remove(unaPer);
-                        System.out.println("El arbitro ha sido eliminado por Jhon Wick");
+                        System.out.println("El árbitro ha sido eliminado exitosamente.");
                         comprobante = true;
                         break;
                     }
                 }
-            }
-            if(!comprobante){
-                System.out.println("No se encontro a este arbitro");
-            }
 
+                if (!comprobante) {
+                    System.out.println("No se encontró a este árbitro.");
+                }
+            }
+        } else {
+            System.out.println("Opción no válida.");
         }
-        else{
-            System.out.println("boso nabo? salga de aca");
-        }
-
     }
-
     public static void AltaPartida(){
 
         System.out.println("Ingrese el nivel de la partida 1: Regional , 2: Nacional , 3: Internacional ");
@@ -300,7 +325,6 @@ public class Main {
 
 
     }
-
     public static void ModificarPartida(){
         System.out.println("---MODIFICAR PARTIDA---");
         System.out.println("Ingresar un id de partida para modificar");
@@ -350,7 +374,6 @@ public class Main {
             System.out.println("No hay partida con este ID");
         }
     }
-
     public static void BajaPartida(){
         System.out.println("--- ELIMINAR PARTIDA ---");
        int opcion = 0;
