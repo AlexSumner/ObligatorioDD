@@ -38,7 +38,7 @@ private String Pais;
 
     @Override
     public String toString() {
-        return "Persona{" + "Id=" + Id + ", Nombre='" + Nombre + '\'' + ", Apellido='" + Apellido + '\'' + ", Pais='" + Pais + '\'' + '}';
+        return "Id=" + Id + ", Nombre='" + Nombre + '\'' + ", Apellido='" + Apellido + '\'' + ", Pais='" + Pais + '\'';
     }
 
     public Persona(int id, String nombre, String apellido, String pais) {
