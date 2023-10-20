@@ -8,6 +8,9 @@ import java.util.Date;
 public class Main {
     static Scanner entrada = new Scanner(System.in);
     static ArrayList<Persona> personas = new ArrayList<>();
+    Persona unJugador1 = new Jugador(24,"Juancito","Perez","Brail",125, (short) 23);
+    Persona unJugador2 = new Jugador(23,"Ramon","Gonzalez","Uruguay",322,(short) 45);
+    Persona unJugador3 = new Jugador(22,"Enrique","Suarez","Argentina",250,(short) 32);
     static ArrayList<Partida> partidas = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -30,6 +33,7 @@ public class Main {
             System.out.println("10. Mostrar partidas de un jugador");
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
+            System.out.println("13. Atribucion de puntaje");
             opcion = Integer.parseInt(entrada.nextLine());
             
             switch(opcion){
@@ -79,6 +83,10 @@ public class Main {
                 }
                 case 12: {
                     historialDePartidas();
+                    break;
+                }
+                case 13: {
+                    atribucionDePuntaje();
                     break;
                 }
 
@@ -169,17 +177,13 @@ public class Main {
                 if (unaPersona.getCi() == opcion){
                     System.out.println("Ingrese un nuevo nombre: ");
                     String nombre = entrada.nextLine();
-
                     System.out.println("Ingrese un nuevo apellido: ");
                     String apellido = entrada.nextLine();
-
                     System.out.println("Ingrese un nuevo pais: ");
                     String pais = entrada.nextLine();
-
                     if (unaPersona instanceof Jugador ){
                         System.out.println("Ingrese un nuevo valor de elo: ");
                         int elo = Integer.parseInt(entrada.nextLine());
-
                         System.out.println("Ingrese una nueva edad: ");
                         short edad = Short.parseShort(entrada.nextLine());
                         ((Jugador) unaPersona).setElo(elo);
@@ -532,5 +536,28 @@ public class Main {
             }
         }
     }
+    private static void atribucionDePuntaje(){
+        System.out.println("Ingresar un ID de partida");
+        int idIngresada = Integer.parseInt(entrada.nextLine());
+        for (Partida unaPartida : partidas){
+            if(unaPartida.getId() == idIngresada){
+                Jugador ganador = unaPartida.getGanador();
+                if(ganador == unaPartida.getJugador1()){
+                    ganador = unaPartida.getJugador1();
+                   Jugador perdedor = unaPartida.getJugador2();
+                   for (Persona unaPersona : personas){
+                       if(unaPersona instanceof Jugador && unaPersona.getCi() == ganador.getCi()){
+                           ((Jugador) unaPersona).setElo((ganador.getElo() - perdedor.getElo()) / 4);
+                       }
+                   }
+                }else if(ganador == unaPartida.getJugador2()){
+                    ganador = unaPartida.getJugador2();
+                    Jugador perdedor = unaPartida.getJugador1();
+                }
+            }
+        }
+    }
+
+
     //#endregion
 }
