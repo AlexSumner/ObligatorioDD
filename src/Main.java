@@ -1,8 +1,9 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 import java.util.Date;
 
 public class Main {
@@ -30,8 +31,8 @@ public class Main {
             System.out.println("10. Mostrar partidas de un jugador");
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
-            System.out.println("13. Mostrar cuanto ah cobrado un juez");
-            System.out.println("14. Mostrar cuanto ah cobrado un jugador");
+            System.out.println("13. Mostrar cuanto a cobrado un juez");
+            System.out.println("14. Mostrar cuanto a cobrado un jugador");
             opcion = Integer.parseInt(entrada.nextLine());
             
             switch(opcion){
@@ -163,11 +164,11 @@ public class Main {
                     System.out.println("El nivel de certificación debe estar entre 1 y 3.");
                 }
 
-                return true;
             } else if (opcion != -1) {
 
                 System.out.println("Ingrese una opción válida");
             }
+            return true;
         }
         return false;
     }
@@ -305,11 +306,34 @@ public class Main {
                                 System.out.println("Ingrese el ci de el jugador");
                                 int ciJugador1 = Integer.parseInt(entrada.nextLine());
 
-                                System.out.println("Ingrese el ci de el segundo jugador");
-                                int ciJugador2 = Integer.parseInt(entrada.nextLine());
+                                int ciJugador2;
+                                do {
+                                    System.out.println("Ingrese el ci del segundo jugador");
+                                    ciJugador2 = Integer.parseInt(entrada.nextLine());
+                                    if (ciJugador1 == ciJugador2) {
+                                        System.out.println("Un jugador no puede jugar contra sí mismo. Por favor, elija dos jugadores diferentes.");
+                                    }
+                                } while (ciJugador1 == ciJugador2);
 
-                                System.out.println("Ingrese fecha de el partido");
-                                Date fecha = new Date(entrada.nextLine());
+                                Date fecha = null;
+                                boolean fechaValida = false;
+
+                                while (!fechaValida) {
+                                    System.out.println("Ingrese la fecha del partido (formato dd/MM/yyyy):");
+                                    String fechaInput = entrada.nextLine();
+
+                                    if (esFechaValida(fechaInput)) {
+                                        try {
+                                            fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaInput);
+                                        } catch (ParseException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        fechaValida = true;
+                                    } else {
+                                        System.out.println("Fecha inválida o formato incorrecto. Intente nuevamente.");
+                                    }
+                                }
+
 
                                 System.out.println("Ingrese el CI del ganador (o presione Enter para dejarlo en blanco): ");
                                 String ganadorInput = entrada.nextLine();
@@ -359,7 +383,6 @@ public class Main {
             System.out.println("Ese nivel no existe en nuestros registros, debe ser 1 ,2 o 3");
         }
     }
-
     public static void ModificarPartida(){
         System.out.println("---MODIFICAR PARTIDA---");
         System.out.println("Ingresar un id de partida para modificar");
@@ -435,9 +458,6 @@ public class Main {
        }
     }
     //#endregion
-
-
-
     //#region "Metodos Auxiliares"
     public static void listarJugadores(){
         for(Persona unaPersona : personas){
@@ -484,7 +504,6 @@ public class Main {
         }
         return null;
     }
-
     private static void MostrarPartidasJugador(){
 
         System.out.println("Ingrese la cedula de el jugador para ver su historial");
@@ -513,7 +532,6 @@ public class Main {
             System.out.println("No se encontro un jugador ni partidas con ese numero de cédula.");
         }
     }
-
     private static void MostrarPartidasFecha() {
         System.out.println("Ingrese la fecha de la partida en formato 00/00/0000 para ver las partidas jugadas en esa fecha");
         String fechaStr = entrada.nextLine();
@@ -532,8 +550,6 @@ public class Main {
             System.out.println("Fecha ingresada en formato incorrecto. Debe ser 00/00/0000.");
         }
     }
-
-
     private static void historialDePartidas(){
         System.out.println("Ingrese un ID partida");
         int idPartida = Integer.parseInt(entrada.nextLine());
@@ -543,10 +559,8 @@ public class Main {
             }
         }
     }
-
     private static void DineroJuez(){
     try{
-
 
         System.out.println("Ingrese la cedula de identidad de el juez");
 
@@ -563,7 +577,6 @@ public class Main {
         System.out.println("A ocurrido un error en el codigo: " + e );
     }
     }
-
     private static void DineroJugador(){
         try{
 
@@ -583,7 +596,6 @@ public class Main {
             System.out.println("A ocurrido un error en el codigo: " + e );
         }
     }
-
     public static void controlElo(Partida unaPartida){
 
         Jugador Perdedor = null;
@@ -614,4 +626,27 @@ public class Main {
 
     }
     //#endregion
+    public static boolean esFechaValida(String fechaStr) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+
+        try {
+            Date fecha = dateFormat.parse(fechaStr);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fecha);
+
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            if (year >= 0 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                return true;
+            }
+        } catch (ParseException e) {
+
+        }
+        return false;
+    }
+
+
 }
