@@ -12,6 +12,13 @@ public class Main {
     static File miArchivo = new File("archivo.txt");
     public static void main(String[] args) {
 
+        Persona Nahuel = new Jugador(1,"Nahuel","Pages","Uru" , 99999, (short) 21);
+        Persona Alejo = new Jugador(2,"Alejo","Spinelli","Uru" , 178203, (short) 19);
+        Persona Alexis = new Arbitro(3,"Alexis","Araujo","Bra" , (short) 9);
+        personas.add(Nahuel);
+        personas.add(Alejo);
+        personas.add(Alexis);
+
         if(!miArchivo.exists()){
             try {
                 miArchivo.createNewFile();
@@ -121,12 +128,21 @@ public class Main {
             FileWriter fileWriter = new FileWriter(archivo, false); // El segundo parámetro "false" indica que no se añadirán datos, sino que se sobrescribirán los existentes
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
+            bufferedWriter.write("Registro de Personas: ");
+            bufferedWriter.newLine();
             // Escribir los datos de personas en el archivo
             for (Persona persona : personas) {
                 bufferedWriter.write(persona.toString());
                 bufferedWriter.newLine();
             }
 
+            bufferedWriter.write("Registro de partidas: ");
+            bufferedWriter.newLine();
+
+            for (Partida partida : partidas) {
+                bufferedWriter.write( "Numero Partida: "+ partida.getId() + " Juega: " + partida.getJugador1().getNombre() + " VS " + partida.getJugador2().getNombre() + " Ganador: " + partida.getGanador().getNombre());
+                bufferedWriter.newLine();
+            }
             // Cerrar el archivo
             bufferedWriter.close();
             fileWriter.close();
