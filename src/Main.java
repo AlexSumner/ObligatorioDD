@@ -3,20 +3,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.Date;
+import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
 
 public class Main {
     static Scanner entrada = new Scanner(System.in);
     static ArrayList<Persona> personas = new ArrayList<>();
+
     Persona unJugador1 = new Jugador(24,"Juancito","Perez","Brail",125, (short) 23);
     Persona unJugador2 = new Jugador(23,"Ramon","Gonzalez","Uruguay",322,(short) 45);
     Persona unJugador3 = new Jugador(22,"Enrique","Suarez","Argentina",250,(short) 32);
     static ArrayList<Partida> partidas = new ArrayList<>();
+    static File miArchivo = new File("archivo.txt");
 
     public static void main(String[] args) {
+        if(!miArchivo.exists()){
+            try {
+                miArchivo.createNewFile();
+                System.out.println(miArchivo.getName()+"fue creado!");
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
 
         int opcion = 0;
-
         while (opcion != -1){
             System.out.println("Gestion Campeonato Ajedrez ");
             System.out.println("Ingrese -1 para salir del programa.");
@@ -34,6 +47,7 @@ public class Main {
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
             System.out.println("13. Atribucion de puntaje");
+            System.out.println("14. Guardar archivos");
             opcion = Integer.parseInt(entrada.nextLine());
             
             switch(opcion){
@@ -89,6 +103,10 @@ public class Main {
                     atribucionDePuntaje();
                     break;
                 }
+                case 14:{
+                    guardarArchivos();
+                    break;
+                }
 
                 default:{
                     if(opcion != -1){
@@ -99,76 +117,120 @@ public class Main {
         }
 
     }
+    public static void guardarArchivos() {
+        try {
+            File archivo = new File("archivo.txt");
+            if (!archivo.exists()) {
+                System.out.println("El archivo no existe.");
+                return;
+            }
+
+            FileInputStream fileInputStream = new FileInputStream("archivo.txt");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            Object obj = objectInputStream.readObject();
+            if (obj instanceof ArrayList) {
+                ArrayList<Persona> personas = (ArrayList<Persona>) obj;
+
+                for (Persona persona : personas) {
+                    System.out.println(persona.toString());
+                }
+            } else {
+                System.out.println("El archivo no contiene un ArrayList de personas.");
+            }
+
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Error al deserializar los datos. Los datos pueden estar corruptos.");
+            e.printStackTrace();
+        }
+    }
+
     //#region "ABM Persona"
-    public static boolean altaPersona(){
+    public static boolean altaPersona() {
         int opcion = 0;
 
-        while(opcion != -1){
-            System.out.println("Seleccione la persona que desea ingresar: ");
-            System.out.println("Ingrese -1 para salir.");
-            System.out.println("1. Jugador");
-            System.out.println("2. Árbitro");
+        try {
+            FileWriter fileWriter = new FileWriter("archivo.txt", true); // Abre el archivo para agregar datos
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            opcion = Integer.parseInt(entrada.nextLine());
+            while (opcion != -1) {
+                System.out.println("Seleccione la persona que desea ingresar: ");
+                System.out.println("Ingrese -1 para salir.");
+                System.out.println("1. Jugador");
+                System.out.println("2. Árbitro");
 
-            if(opcion == 1){
-                System.out.println("Ingrese Cedula de Identidad:");
-                int id = Integer.parseInt(entrada.nextLine());
+                opcion = Integer.parseInt(entrada.nextLine());
 
-                System.out.println("Ingrese el nombre: ");
-                String nombre = entrada.nextLine();
+                if (opcion == 1) {
+                    System.out.println("Ingrese Cedula de Identidad:");
+                    int id = Integer.parseInt(entrada.nextLine());
 
-                System.out.println("Ingrese el apellido:");
-                String apellido = entrada.nextLine();
+                    System.out.println("Ingrese el nombre: ");
+                    String nombre = entrada.nextLine();
 
-                System.out.println("Ingrese el pais: ");
-                String pais = entrada.nextLine();
+                    System.out.println("Ingrese el apellido:");
+                    String apellido = entrada.nextLine();
 
-                System.out.println("Ingrese el valor ELO del jugador: ");
-                int elo = Integer.parseInt(entrada.nextLine());
+                    System.out.println("Ingrese el pais: ");
+                    String pais = entrada.nextLine();
 
-                System.out.println("Ingrese la edad del jugador: ");
-                short edad = Short.parseShort(entrada.nextLine());
+                    System.out.println("Ingrese el valor ELO del jugador: ");
+                    int elo = Integer.parseInt(entrada.nextLine());
 
-                Persona unJugador = new Jugador(id, nombre, apellido, pais, elo, edad);
+                    System.out.println("Ingrese la edad del jugador: ");
+                    short edad = Short.parseShort(entrada.nextLine());
 
-                personas.add(unJugador);
+                    Persona unJugador = new Jugador(id, nombre, apellido, pais, elo, edad);
+                    personas.add(unJugador);
 
-                System.out.println(unJugador);
+                    // Escribe los datos del jugador en el archivo
+                    bufferedWriter.write(unJugador.toString());
+                    bufferedWriter.newLine();
+                } else if (opcion == 2) {
+                    System.out.println("Ingrese Cedula de Identidad:");
+                    int id = Integer.parseInt(entrada.nextLine());
 
-            } else if (opcion == 2) {
+                    System.out.println("Ingrese el nombre: ");
+                    String nombre = entrada.nextLine();
 
-                System.out.println("Ingrese Cedula de Identidad:");
-                int id = Integer.parseInt(entrada.nextLine());
+                    System.out.println("Ingrese el apellido:");
+                    String apellido = entrada.nextLine();
 
-                System.out.println("Ingrese el nombre: ");
-                String nombre = entrada.nextLine();
+                    System.out.println("Ingrese el pais: ");
+                    String pais = entrada.nextLine();
 
-                System.out.println("Ingrese el apellido:");
-                String apellido = entrada.nextLine();
+                    System.out.println("Ingrese el nivel de certificación (del 1 al 3): ");
+                    short nvl_Certificacion = Short.parseShort(entrada.nextLine());
 
-                System.out.println("Ingrese el pais: ");
-                String pais = entrada.nextLine();
+                    if (nvl_Certificacion >= 1 && nvl_Certificacion <= 3) {
+                        Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
+                        personas.add(unArbitro);
 
-                System.out.println("Ingrese el nivel de certificación (del 1 al 3): ");
-                short nvl_Certificacion = Short.parseShort(entrada.nextLine());
-
-                if (nvl_Certificacion >= 1 && nvl_Certificacion <= 3) {
-                    Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
-                    personas.add(unArbitro);
-                    System.out.println("Árbitro registrado con éxito: " + unArbitro);
-                } else {
-                    System.out.println("El nivel de certificación debe estar entre 1 y 3.");
+                        // Escribe los datos del árbitro en el archivo
+                        bufferedWriter.write(unArbitro.toString());
+                        bufferedWriter.newLine();
+                    } else {
+                        System.out.println("El nivel de certificación debe estar entre 1 y 3.");
+                    }
+                } else if (opcion != -1) {
+                    System.out.println("Ingrese una opción válida");
                 }
-
-                return true;
-            } else if (opcion != -1) {
-
-                System.out.println("Ingrese una opción válida");
             }
+
+            // Cierra el BufferedWriter y FileWriter al final
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return false;
     }
+
     public static boolean modificarPersona(){
             System.out.println("Seleccione un ID de persona que desea modificar");
             int opcion = Integer.parseInt(entrada.nextLine());
@@ -429,8 +491,6 @@ public class Main {
     }
     //#endregion
 
-
-
     //#region "Metodos Auxiliares"
     public static void listarJugadores(){
         for(Persona unaPersona : personas){
@@ -557,6 +617,11 @@ public class Main {
             }
         }
     }
+
+
+    //#endregion
+
+    //#region Archivo txt
 
 
     //#endregion
