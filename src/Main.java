@@ -1,8 +1,6 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 import java.util.Date;
 
 public class Main {
@@ -31,7 +29,7 @@ public class Main {
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
             opcion = Integer.parseInt(entrada.nextLine());
-            
+
             switch(opcion){
                 case 1 :{
                     altaPersona();
@@ -58,7 +56,7 @@ public class Main {
                     break;
                 }
                 case 7 :{
-                   ModificarPartida();
+                    ModificarPartida();
                     break;
                 }
                 case 8 :{
@@ -107,6 +105,11 @@ public class Main {
                 System.out.println("Ingrese Cedula de Identidad:");
                 int id = Integer.parseInt(entrada.nextLine());
 
+                if(!controlCi(id)){
+                    System.out.println("La cedula de esta persona ya se encuentra registrada");
+                    return false ;
+                }
+
                 System.out.println("Ingrese el nombre: ");
                 String nombre = entrada.nextLine();
 
@@ -133,6 +136,11 @@ public class Main {
                 System.out.println("Ingrese Cedula de Identidad:");
                 int id = Integer.parseInt(entrada.nextLine());
 
+                if(!controlCi(id)){
+                    System.out.println("La cedula de esta persona ya se encuentra registrada");
+                    return false ;
+                }
+
                 System.out.println("Ingrese el nombre: ");
                 String nombre = entrada.nextLine();
 
@@ -158,46 +166,47 @@ public class Main {
 
                 System.out.println("Ingrese una opción válida");
             }
+            return true;
         }
         return false;
     }
     public static boolean modificarPersona(){
-            System.out.println("Seleccione un ID de persona que desea modificar");
-            int opcion = Integer.parseInt(entrada.nextLine());
+        System.out.println("Seleccione un ID de persona que desea modificar");
+        int opcion = Integer.parseInt(entrada.nextLine());
 
-            for (Persona unaPersona : personas){
-                if (unaPersona.getCi() == opcion){
-                    System.out.println("Ingrese un nuevo nombre: ");
-                    String nombre = entrada.nextLine();
+        for (Persona unaPersona : personas){
+            if (unaPersona.getCi() == opcion){
+                System.out.println("Ingrese un nuevo nombre: ");
+                String nombre = entrada.nextLine();
 
-                    System.out.println("Ingrese un nuevo apellido: ");
-                    String apellido = entrada.nextLine();
+                System.out.println("Ingrese un nuevo apellido: ");
+                String apellido = entrada.nextLine();
 
-                    System.out.println("Ingrese un nuevo pais: ");
-                    String pais = entrada.nextLine();
+                System.out.println("Ingrese un nuevo pais: ");
+                String pais = entrada.nextLine();
 
-                    if (unaPersona instanceof Jugador ){
-                        System.out.println("Ingrese un nuevo valor de elo: ");
-                        int elo = Integer.parseInt(entrada.nextLine());
+                if (unaPersona instanceof Jugador ){
+                    System.out.println("Ingrese un nuevo valor de elo: ");
+                    int elo = Integer.parseInt(entrada.nextLine());
 
-                        System.out.println("Ingrese una nueva edad: ");
-                        short edad = Short.parseShort(entrada.nextLine());
-                        ((Jugador) unaPersona).setElo(elo);
-                        ((Jugador) unaPersona).setEdad(edad);
-                    }else if (unaPersona instanceof Arbitro){
-                        System.out.println("Ingrese un nuevo Nivel de Certificacion: ");
-                        short Nvl_Certificacion = Short.parseShort(entrada.nextLine());
-                        ((Arbitro) unaPersona).setNvl_Certificacion(Nvl_Certificacion);
-                    }
-                    unaPersona.setNombre(nombre);
-                    unaPersona.setApellido(apellido);
-                    unaPersona.setPais(pais);
+                    System.out.println("Ingrese una nueva edad: ");
+                    short edad = Short.parseShort(entrada.nextLine());
+                    ((Jugador) unaPersona).setElo(elo);
+                    ((Jugador) unaPersona).setEdad(edad);
+                }else if (unaPersona instanceof Arbitro){
+                    System.out.println("Ingrese un nuevo Nivel de Certificacion: ");
+                    short Nvl_Certificacion = Short.parseShort(entrada.nextLine());
+                    ((Arbitro) unaPersona).setNvl_Certificacion(Nvl_Certificacion);
                 }
-                System.out.println("Persona modificada: "+unaPersona);
-                return true;
+                unaPersona.setNombre(nombre);
+                unaPersona.setApellido(apellido);
+                unaPersona.setPais(pais);
             }
+            System.out.println("Persona modificada: "+unaPersona);
+            return true;
+        }
         System.out.println("No se encontro persona con ese numero de ID!!");
-            return false;
+        return false;
     }
     public static void BajaPersona() {
         System.out.println("¿Qué desea eliminar, Jugadores (1) o Árbitro (2)?");
@@ -283,65 +292,101 @@ public class Main {
         if(idTipo < 4 && idTipo > 0){
             System.out.println("Ingrese el ci de el arbitro encargado de la partida");
             int ciArbitro = Integer.parseInt(entrada.nextLine());
-                for(Persona unaPersona : personas){
-                    if(unaPersona instanceof Arbitro ){
-                        if(unaPersona.getCi() == ciArbitro){
-                            if(idTipo <= ((Arbitro) unaPersona).getNvl_Certificacion()){
-                                Arbitro unArbitro = ((Arbitro) unaPersona);
+            for(Persona unaPersona : personas){
+                if(unaPersona instanceof  Jugador){
+                    if(unaPersona.getCi() == ciArbitro){
+                        System.out.println("El arbitro no puede ser un jugador");
+                        return;
+                    }
+                }
+                if(unaPersona instanceof Arbitro ){
+                    if(unaPersona.getCi() == ciArbitro){
+                        if(idTipo <= ((Arbitro) unaPersona).getNvl_Certificacion()){
+                            Arbitro unArbitro = ((Arbitro) unaPersona);
 
-                                System.out.println("Ingrese el numero la partida");
-                                int idPartida = Integer.parseInt(entrada.nextLine());
-
-                                System.out.println("Ingrese el ci de el jugador");
-                                int ciJugador1 = Integer.parseInt(entrada.nextLine());
-
-                                System.out.println("Ingrese el ci de el segundo jugador");
-                                int ciJugador2 = Integer.parseInt(entrada.nextLine());
-
-                                System.out.println("Ingrese fecha de el partido");
-                                Date fecha = new Date(entrada.nextLine());
-
-                                System.out.println("Ingrese el CI del ganador (o presione Enter para dejarlo en blanco): ");
-                                String ganadorInput = entrada.nextLine();
-                                Persona ganador = null;
-
-                                if (!ganadorInput.isEmpty()) {
-                                    int ciGanador = Integer.parseInt(ganadorInput);
-                                    for (Persona unPer : personas) {
-                                        if (unPer.getCi() == ciGanador) {
-                                            ganador = unPer;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                Jugador jugadorUno = null;
-                                Jugador jugadorDos = null;
-                                for(Persona per : personas){
-                                    if(per.getCi() == ciJugador1){
-                                        jugadorUno = ((Jugador) per);
-                                    }
-                                    if(per.getCi() == ciJugador2){
-                                        jugadorDos = ((Jugador) per);
-                                    }
-                                }
-                                String tipo = "";
-                                if( idTipo == 1){
-                                    tipo = "Regional";
-                                } else if (idTipo == 2) {
-                                    tipo = "Nacional";
-                                }else {
-                                    tipo = "Internacional";
-                                }
-                                Partida unaPartida = new Partida(idPartida,jugadorUno,jugadorDos,unArbitro,fecha,tipo, (Jugador) ganador);
-                                partidas.add(unaPartida);
-                                System.out.println(unaPartida.toString());
-                            }else {
-                                System.out.println("El nivel de el arbitro no es suficiente para esta partida");
+                            System.out.println("Ingrese el numero la partida");
+                            int idPartida = Integer.parseInt(entrada.nextLine());
+                            if(!controlIdPartida(idPartida)){
+                                System.out.println("El id de esta partida ya se encuentra registrado");
+                                return;
                             }
+                            System.out.println("Ingrese el ci de el jugador");
+                            int ciJugador1 = Integer.parseInt(entrada.nextLine());
+
+                            int ciJugador2;
+                            do {
+                                System.out.println("Ingrese el ci del segundo jugador");
+                                ciJugador2 = Integer.parseInt(entrada.nextLine());
+                                if(controlCi(ciJugador2)){
+                                    System.out.println("Este jugador no se encuentra registrado, ingreselo");
+                                    return;
+                                }
+                                if (ciJugador1 == ciJugador2) {
+                                    System.out.println("Un jugador no puede jugar contra sí mismo. Por favor, elija dos jugadores diferentes.");
+                                }
+                            } while (ciJugador1 == ciJugador2);
+
+                            Date fecha = null;
+                            boolean fechaValida = false;
+
+                            while (!fechaValida) {
+                                System.out.println("Ingrese la fecha del partido (formato dd/MM/yyyy):");
+                                String fechaInput = entrada.nextLine();
+
+                                if (esFechaValida(fechaInput)) {
+                                    try {
+                                        fecha = new SimpleDateFormat("dd/MM/yyyy").parse(fechaInput);
+                                    } catch (ParseException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    fechaValida = true;
+                                } else {
+                                    System.out.println("Fecha inválida o formato incorrecto. Intente nuevamente.");
+                                }
+                            }
+
+                            System.out.println("Ingrese el CI del ganador (o presione Enter para dejarlo en blanco): ");
+                            String ganadorInput = entrada.nextLine();
+                            Persona ganador = null;
+
+                            if (!ganadorInput.isEmpty()) {
+                                int ciGanador = Integer.parseInt(ganadorInput);
+                                for (Persona unPer : personas) {
+                                    if (unPer.getCi() == ciGanador) {
+                                        ganador = unPer;
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                            Jugador jugadorUno = null;
+                            Jugador jugadorDos = null;
+                            for(Persona per : personas){
+                                if(per.getCi() == ciJugador1){
+                                    jugadorUno = ((Jugador) per);
+                                }
+                                if(per.getCi() == ciJugador2){
+                                    jugadorDos = ((Jugador) per);
+                                }
+                            }
+                            String tipo = "";
+                            if( idTipo == 1){
+                                tipo = "Regional";
+                            } else if (idTipo == 2) {
+                                tipo = "Nacional";
+                            }else {
+                                tipo = "Internacional";
+                            }
+                            Partida unaPartida = new Partida(idPartida,jugadorUno,jugadorDos,unArbitro,fecha,tipo, (Jugador) ganador);
+                            partidas.add(unaPartida);
+                            System.out.println(unaPartida.toString());
+                        }else {
+                            System.out.println("El nivel de el arbitro no es suficiente para esta partida");
                         }
                     }
                 }
+            }
 
         }
         else {
@@ -400,28 +445,26 @@ public class Main {
     }
     public static void BajaPartida(){
         System.out.println("--- ELIMINAR PARTIDA ---");
-       int opcion = 0;
 
-       while(opcion != -1){
-           for (Partida unaPartida: partidas){
-               System.out.println(unaPartida.toString());
-               System.out.println("----------------------");
-           }
-           System.out.println("Seleccione una partida");
-           opcion = Integer.parseInt(entrada.nextLine());
-           Partida partida = buscarPartida(opcion);
-           if (partida != null) {
-               if (partida.getGanador() != null) {
-                   System.out.println("La partida no puede eliminarse, ya tiene un ganador.");
-               } else {
-                   partidas.remove(partida);
-                   System.out.println("La partida ha sido eliminada con éxito.");
-               }
-           } else {
-               System.out.println("Partida no encontrada.");
-           }
+            for (Partida unaPartida: partidas){
+                System.out.println(unaPartida.toString());
+                System.out.println("----------------------");
+            }
+            System.out.println("Seleccione una partida");
+            int idPartida = Integer.parseInt(entrada.nextLine());
+            Partida partida = buscarPartida(idPartida);
+            if (partida != null) {
+                if (partida.getGanador() != null) {
+                    System.out.println("La partida no puede eliminarse, ya tiene un ganador.");
+                } else {
+                    partidas.remove(partida);
+                    System.out.println("La partida ha sido eliminada con éxito.");
+                }
+            } else {
+                System.out.println("Partida no encontrada.");
+            }
 
-       }
+
     }
     //#endregion
 
@@ -429,24 +472,39 @@ public class Main {
 
     //#region "Metodos Auxiliares"
     public static void listarJugadores(){
+        boolean validar = false;
         for(Persona unaPersona : personas){
             if(unaPersona instanceof Jugador){
                 Jugador jugador = (Jugador) unaPersona;
+                validar = true;
                 System.out.println(jugador);
             }
         }
+        if(!validar){
+            System.out.println("No se encuentran Jugadores registrados, ingrese uno");
+        }
     }
     public static void listarArbitros(){
+        boolean validar = false;
         for(Persona unaPersona : personas){
             if(unaPersona instanceof Arbitro){
                 Arbitro arbitro = (Arbitro) unaPersona;
+                validar = true;
                 System.out.println(arbitro);
             }
         }
+        if(!validar){
+            System.out.println("No se encuentran Arbitros registrados, ingrese uno");
+        }
     }
     public static void listaPartidas() {
+        boolean validar = false;
         for (Partida partida : partidas) {
             System.out.println(partida.toString());
+            validar = true;
+        }
+        if(!validar){
+            System.out.println("No se encuentran Partidas registrados, ingrese uno");
         }
     }
     private static Partida buscarPartida(int id){
@@ -483,7 +541,7 @@ public class Main {
 
         for (Persona unaPersona: personas){
             if(unaPersona instanceof Jugador && unaPersona.getCi() == ci){
-                 jugador = (Jugador) unaPersona;
+                jugador = (Jugador) unaPersona;
             }
         }
         if(jugador != null){
@@ -509,6 +567,9 @@ public class Main {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
+            if(esFechaValida(fechaStr)){
+
+
             Date fecha = dateFormat.parse(fechaStr);
 
             for (Partida part : partidas) {
@@ -517,6 +578,9 @@ public class Main {
                     System.out.println("---------------------------------------------------------------------");
                 }
             }
+
+            }else
+                System.out.println("Fecha ingresada incorrectamente");
         } catch (ParseException e) {
             System.out.println("Fecha ingresada en formato incorrecto. Debe ser 00/00/0000.");
         }
@@ -532,5 +596,48 @@ public class Main {
             }
         }
     }
+
+    private static boolean controlCi(int id){
+        for(Persona unaPersonaValidacionCi : personas){
+            if(unaPersonaValidacionCi.getCi() == id){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean controlIdPartida(int id){
+        for(Partida PartidasValidacionId : partidas){
+            if(PartidasValidacionId.getId() == id){
+                return false;
+            }
+        }
+        return true;
+    }
     //#endregion
+
+    public static boolean esFechaValida(String fechaStr) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false);
+
+        try {
+            Date fecha = dateFormat.parse(fechaStr);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fecha);
+
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            if (year >= 2000 && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+                return true;
+            }
+        } catch (ParseException e) {
+
+        }
+        return false;
+    }
+
+
 }
