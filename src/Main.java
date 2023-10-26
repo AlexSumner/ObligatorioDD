@@ -124,7 +124,6 @@ public class Main {
                 System.out.println("El archivo no existe.");
                 return;
             }
-
             FileInputStream fileInputStream = new FileInputStream("archivo.txt");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
@@ -138,7 +137,6 @@ public class Main {
             } else {
                 System.out.println("El archivo no contiene un ArrayList de personas.");
             }
-
             objectInputStream.close();
             fileInputStream.close();
         } catch (IOException e) {
@@ -227,7 +225,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
