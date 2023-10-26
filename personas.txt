@@ -1,0 +1,2 @@
+Jugador{Id=13, Nombre='Pepe', Apellido='Pe', Pais='Uru'elo=1234, edad=19}
+Arbitro{Id=153, Nombre='Juan', Apellido='Cito', Pais='Uru'Nvl_Certificacion=3}
