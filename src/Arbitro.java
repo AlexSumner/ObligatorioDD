@@ -1,4 +1,6 @@
-public class Arbitro extends Persona{
+import java.io.Serializable;
+
+public class Arbitro extends Persona implements Serializable{
     private short Nvl_Certificacion;
 
     public short getNvl_Certificacion() {

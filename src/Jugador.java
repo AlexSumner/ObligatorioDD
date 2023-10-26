@@ -1,4 +1,5 @@
-public class Jugador extends Persona{
+import java.io.Serializable;
+public class Jugador extends Persona  implements Serializable {
     private int elo;
     private short edad;
 
@@ -28,4 +29,5 @@ public class Jugador extends Persona{
         this.elo = elo;
         this.edad = edad;
     }
+
 }
