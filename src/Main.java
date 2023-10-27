@@ -12,12 +12,6 @@ public class Main {
     static File miArchivo = new File("archivo.txt");
     public static void main(String[] args) {
 
-        Persona Nahuel = new Jugador(1,"Nahuel","Pages","Uru" , 99999, (short) 21);
-        Persona Alejo = new Jugador(2,"Alejo","Spinelli","Uru" , 178203, (short) 19);
-        Persona Alexis = new Arbitro(3,"Alexis","Araujo","Bra" , (short) 9);
-        personas.add(Nahuel);
-        personas.add(Alejo);
-        personas.add(Alexis);
 
         if(!miArchivo.exists()){
             try {
@@ -27,6 +21,7 @@ public class Main {
                 ex.printStackTrace();
             }
         }
+        importarTxt();
 
         int opcion = 0;
 
@@ -122,45 +117,112 @@ public class Main {
         }
 
     }
+
+    public static void importarTxt(){
+
+    try (BufferedReader br = new BufferedReader(new FileReader("archivo.txt"))) {
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            // Parsea la línea para obtener los datos, por ejemplo, separando por comas
+            String[] datos = linea.split(",");
+
+            if (datos.length == 6) { // Jugador
+                int id = Integer.parseInt(datos[0]);
+                String nombre = datos[1];
+                String apellido = datos[2];
+                String pais = datos[3];
+                short edad = Short.parseShort(datos[4]);
+                int elo = Integer.parseInt(datos[5]);
+
+
+                Persona persona = new Jugador(id, nombre, apellido, pais, elo, edad);
+                personas.add(persona);
+            }
+
+            if (datos.length == 5) { // Arbitro
+
+                int id = Integer.parseInt(datos[0]);
+                String nombre = datos[1];
+                String apellido = datos[2];
+                String pais = datos[3];
+                short nivelCertificacion = Short.parseShort(datos[4]);
+
+                // Crea un objeto Persona y agrégalo al ArrayList
+                Persona persona = new Arbitro(id, nombre, apellido, pais,nivelCertificacion);
+                personas.add(persona);
+
+            }
+
+
+            if (datos.length == 7) { // Partida
+
+                int id = Integer.parseInt(datos[0]);
+                Jugador jugador1 = buscarJugador(Integer.parseInt(datos[1]));
+                Jugador jugador2 = buscarJugador(Integer.parseInt(datos[2]));
+                Arbitro Arbitro = buscarArbitro(Integer.parseInt(datos[3]));
+                Date fechaPartido;
+                try{
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                     fechaPartido = dateFormat.parse(datos[4]);;
+                }catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                String tipoPartida = datos[5];
+                Jugador Ganador = buscarJugador(Integer.parseInt(datos[6]));
+
+
+                // Crea un objeto Persona y agrégalo al ArrayList
+                Partida partidasa = new Partida(id, jugador1, jugador2, Arbitro,fechaPartido,tipoPartida,Ganador);
+                partidas.add(partidasa);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
     public static void guardarArchivos() {
         try {
             File archivo = new File("archivo.txt");
 
-            // Eliminar el contenido anterior del archivo
             if (archivo.exists()) {
                 archivo.delete();
             }
 
-            // Crear el archivo (si no existe)
             archivo.createNewFile();
 
-            // Abrir el archivo para escribir los nuevos datos
-            FileWriter fileWriter = new FileWriter(archivo, false); // El segundo parámetro "false" indica que no se añadirán datos, sino que se sobrescribirán los existentes
+            FileWriter fileWriter = new FileWriter(archivo, false);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             bufferedWriter.write("Registro de Personas: ");
             bufferedWriter.newLine();
-            // Escribir los datos de personas en el archivo
+
             for (Persona persona : personas) {
-                bufferedWriter.write(persona.toString());
-                bufferedWriter.newLine();
+                if(persona instanceof Arbitro){
+                    bufferedWriter.write(persona.getCi() + "," + persona.getNombre() + ","+ persona.getApellido() + "," + persona.getPais() + "," + ((Arbitro) persona).getNvl_Certificacion() );
+                    bufferedWriter.newLine();
+                }else if(persona instanceof Jugador) {
+                    bufferedWriter.write(persona.getCi() + "," + persona.getNombre() +","+ persona.getApellido() + "," + persona.getPais() + "," + ((Jugador) persona).getEdad() + "," + ((Jugador) persona).getElo());
+                    bufferedWriter.newLine();
+                }
+
             }
 
             bufferedWriter.write("Registro de partidas: ");
             bufferedWriter.newLine();
 
             for (Partida partida : partidas) {
-                bufferedWriter.write( "Numero Partida: "+ partida.getId() + " Juega: " + partida.getJugador1().getNombre() + " VS " + partida.getJugador2().getNombre() + " Ganador: " + partida.getGanador().getNombre());
+                bufferedWriter.write( partida.getId() + "," + partida.getJugador1().getCi() +  "," + partida.getJugador2().getCi() + "," + partida.getArbitro().getCi() + "," + partida.getFecha() + "," + partida.getTipoPartida() + "," + partida.getGanador().getCi());
                 bufferedWriter.newLine();
             }
-            // Cerrar el archivo
+            // tomar los datos para recrear el objeto partida que va a ir al arrayList
+            // puedo tomar los datos de las personas solo con id para luego buscarlos?
+
             bufferedWriter.close();
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     //#region "ABM Persona"
     public static boolean altaPersona(){
         int opcion = 0;
@@ -366,7 +428,6 @@ public class Main {
             System.out.println("Opción no válida.");
         }
     }
-
     //#endregion
 
     //#region "ABM Partida"
@@ -478,7 +539,6 @@ public class Main {
             System.out.println("Ese nivel no existe en nuestros registros, debe ser 1 ,2 o 3");
         }
     }
-
     public static void ModificarPartida(){
         System.out.println("---MODIFICAR PARTIDA---");
         System.out.println("Ingresar un id de partida para modificar");
@@ -616,7 +676,6 @@ public class Main {
         }
         return null;
     }
-
     private static void MostrarPartidasJugador(){
 
         System.out.println("Ingrese la cedula de el jugador para ver su historial");
@@ -645,7 +704,6 @@ public class Main {
             System.out.println("No se encontro un jugador ni partidas con ese numero de cédula.");
         }
     }
-
     private static void MostrarPartidasFecha() {
         System.out.println("Ingrese la fecha de la partida en formato 00/00/0000 para ver las partidas jugadas en esa fecha");
         String fechaStr = entrada.nextLine();
@@ -670,8 +728,6 @@ public class Main {
             System.out.println("Fecha ingresada en formato incorrecto. Debe ser 00/00/0000.");
         }
     }
-
-
     private static void historialDePartidas(){
         System.out.println("Ingrese un ID partida");
         int idPartida = Integer.parseInt(entrada.nextLine());
@@ -681,7 +737,6 @@ public class Main {
             }
         }
     }
-
     private static boolean controlCi(int id){
         for(Persona unaPersonaValidacionCi : personas){
             if(unaPersonaValidacionCi.getCi() == id){
@@ -690,7 +745,6 @@ public class Main {
         }
         return true;
     }
-
     private static boolean controlIdPartida(int id){
         for(Partida PartidasValidacionId : partidas){
             if(PartidasValidacionId.getId() == id){
@@ -700,7 +754,6 @@ public class Main {
         return true;
     }
     //#endregion
-
     public static boolean esFechaValida(String fechaStr) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -723,7 +776,6 @@ public class Main {
         }
         return false;
     }
-
     private static void DineroJuez () {
         try {
 
@@ -757,7 +809,6 @@ public class Main {
             System.out.println("A ocurrido un error en el codigo: " + e);
         }
     }
-
     private static void DineroJugador () {
         try {
 
