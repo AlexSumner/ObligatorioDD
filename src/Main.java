@@ -46,7 +46,9 @@ public class Main {
             System.out.println("10. Mostrar partidas de un jugador");
             System.out.println("11. Mostrar partidas por fecha");
             System.out.println("12. Mostrar historial del partida y resultado");
-            System.out.println("13. Cargar archivo txt");
+            System.out.println("13. Mostrar sueldo para un juez");
+            System.out.println("14. Mostrar sueldo para un jugador");
+            System.out.println("15. Cargar archivo txt");
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
@@ -99,6 +101,14 @@ public class Main {
                     break;
                 }
                 case 13: {
+                    DineroJuez();
+                    break;
+                }
+                case 14: {
+                    DineroJugador();
+                    break;
+                }
+                case 15: {
                     guardarArchivos();
                     break;
                 }
@@ -712,6 +722,76 @@ public class Main {
 
         }
         return false;
+    }
+
+    private static void DineroJuez () {
+        try {
+
+
+            System.out.println("Ingrese la cedula de identidad de el juez");
+
+            int ci = Integer.parseInt(entrada.nextLine());
+            int total = 0;
+            boolean comprobante = false;
+            for(Persona Jugador : personas){
+                if(Jugador instanceof Jugador){
+                    if(Jugador.getCi() == ci){
+                        System.out.println("El juez no es ningun jugador");
+                        comprobante = true;
+                    }
+                }
+            }
+
+            if(!comprobante){
+                for (Partida par : partidas) {
+                    if (par.getArbitro().getCi() == ci) {
+                        total += 500;
+                    }
+                }
+                System.out.println("El total de dinero que ha cobrado este arbitro es: " + total);
+            }
+
+
+
+        } catch (Exception e) {
+            System.out.println("A ocurrido un error en el codigo: " + e);
+        }
+    }
+
+    private static void DineroJugador () {
+        try {
+
+
+            System.out.println("Ingrese la cedula de identidad de el Jugador");
+
+            int ci = Integer.parseInt(entrada.nextLine());
+            int total = 0;
+
+            boolean comprobante = false;
+            for(Persona Arbitro : personas){
+                if(Arbitro instanceof Arbitro){
+                    if(Arbitro.getCi() == ci){
+                        System.out.println("El jugador no es ningun juez");
+                        comprobante = true;
+                    }
+                }
+            }
+
+            if(!comprobante){
+                for (Partida par : partidas) {
+                    if (par.getJugador1().getCi() == ci || par.getJugador2().getCi() == ci) {
+                        total += 600;
+                    }
+                }
+                System.out.println("El total de dinero que ha cobrado este jugador es: " + total);
+            }
+
+
+
+
+        } catch (Exception e) {
+            System.out.println("A ocurrido un error en el codigo: " + e);
+        }
     }
 
 
