@@ -48,7 +48,11 @@ public class Main {
 
             switch(opcion){
                 case 1 :{
-                    altaPersona();
+                    if( altaPersona()){
+                        System.out.println("Se ha ingresado con exito");
+                    }else
+                        System.out.println("No se pudo ingresar");
+
                     break;
                 }
                 case 2: {
@@ -224,40 +228,80 @@ public class Main {
         }
     }
     //#region "ABM Persona"
-    public static boolean altaPersona(){
+    public static boolean altaPersona() {
         int opcion = 0;
-        //try {
-           // FileWriter fileWriter = new FileWriter("archivo.txt", true); // Abre el archivo para agregar datos
-           // BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        while (opcion != -1) {
+            System.out.println("Seleccione la persona que desea ingresar: ");
+            System.out.println("Ingrese -1 para salir.");
+            System.out.println("1. Jugador");
+            System.out.println("2. Árbitro");
 
-            while (opcion != -1) {
-                System.out.println("Seleccione la persona que desea ingresar: ");
-                System.out.println("Ingrese -1 para salir.");
-                System.out.println("1. Jugador");
-                System.out.println("2. Árbitro");
-
+            try {
                 opcion = Integer.parseInt(entrada.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Ingrese una opción válida (número entero).");
+                continue;
+            }
 
-                if (opcion == 1) {
-                    System.out.println("Ingrese Cedula de Identidad:");
+            if (opcion == 1) {
+                try {
+                    System.out.println("Ingrese Cédula de Identidad sin puntos ni guión:");
                     int id = Integer.parseInt(entrada.nextLine());
 
-                    if (!controlCi(id)) {
-                        System.out.println("La cedula de esta persona ya se encuentra registrada");
+                    if (id <= 0) {
+                        System.out.println("La cédula de identidad debe ser un número positivo.");
+                        continue;
+                    }
+
+
+                        if (!controlCi(id)) {
                         return false;
                     }
 
                     System.out.println("Ingrese el nombre: ");
                     String nombre = entrada.nextLine();
 
+                    if (esNumero(nombre)) {
+                        System.out.println("El nombre no puede ser un número.");
+                        continue;
+                    }
+                    if (nombre.trim().isEmpty()) {
+                        System.out.println("El nombre no puede estar vacío.");
+                        continue;
+                    }
+
                     System.out.println("Ingrese el apellido:");
                     String apellido = entrada.nextLine();
 
-                    System.out.println("Ingrese el pais: ");
+                    if (esNumero(apellido)) {
+                        System.out.println("El apellido no puede ser un número.");
+                        continue;
+                    }
+                    if (apellido.trim().isEmpty()) {
+                        System.out.println("El apellido no puede estar vacío.");
+                        continue;
+                    }
+
+
+                    System.out.println("Ingrese el país: ");
                     String pais = entrada.nextLine();
+
+                    if (esNumero(pais)) {
+                        System.out.println("El país no puede ser un número.");
+                        continue;
+                    }
+                    if (pais.trim().isEmpty()) {
+                        System.out.println("El país no puede estar vacío.");
+                        continue;
+                    }
 
                     System.out.println("Ingrese el valor ELO del jugador: ");
                     int elo = Integer.parseInt(entrada.nextLine());
+
+                    if (elo < 0) {
+                        System.out.println("El valor ELO del jugador debe ser un número positivo o cero.");
+                        continue;
+                    }
 
                     System.out.println("Ingrese la edad del jugador: ");
                     short edad = Short.parseShort(entrada.nextLine());
@@ -265,99 +309,199 @@ public class Main {
                     Persona unJugador = new Jugador(id, nombre, apellido, pais, elo, edad);
 
                     personas.add(unJugador);
-                   // bufferedWriter.write(unJugador.toString());
-                   // bufferedWriter.newLine();
                     System.out.println(unJugador);
-                   // bufferedWriter.close();
-                   // fileWriter.close();
                     return true;
-                } else if (opcion == 2) {
-
-                    System.out.println("Ingrese Cedula de Identidad:");
+                } catch (NumberFormatException e) {
+                    System.out.println("Error en el formato de entrada. Por favor, ingrese datos válidos.");
+                }
+            } else if (opcion == 2) {
+                try {
+                    System.out.println("Ingrese Cédula de Identidad:");
                     int id = Integer.parseInt(entrada.nextLine());
 
+                    if (id <= 0) {
+                        System.out.println("La cédula de identidad debe ser un número positivo.");
+                        continue;
+                    }
+
                     if (!controlCi(id)) {
-                        System.out.println("La cedula de esta persona ya se encuentra registrada");
+                        System.out.println("La cédula de esta persona ya se encuentra registrada");
                         return false;
                     }
 
                     System.out.println("Ingrese el nombre: ");
                     String nombre = entrada.nextLine();
 
+                    if (esNumero(nombre)) {
+                        System.out.println("El nombre no puede ser un número.");
+                        continue;
+                    }
+                    if (nombre.trim().isEmpty()) {
+                        System.out.println("El nombre no puede estar vacío.");
+                        continue;
+                    }
+
                     System.out.println("Ingrese el apellido:");
                     String apellido = entrada.nextLine();
 
-                    System.out.println("Ingrese el pais: ");
+                    if (esNumero(apellido)) {
+                        System.out.println("El apellido no puede ser un número.");
+                        continue;
+                    }
+                    if (apellido.trim().isEmpty()) {
+                        System.out.println("El apellido no puede estar vacío.");
+                        continue;
+                    }
+
+
+                    System.out.println("Ingrese el país: ");
                     String pais = entrada.nextLine();
+
+                    if (esNumero(pais)) {
+                        System.out.println("El país no puede ser un número.");
+                        continue;
+                    }
+                    if (pais.trim().isEmpty()) {
+                        System.out.println("El país no puede estar vacío.");
+                        continue;
+                    }
 
                     System.out.println("Ingrese el nivel de certificación (del 1 al 3): ");
                     short nvl_Certificacion = Short.parseShort(entrada.nextLine());
 
-                    if (nvl_Certificacion >= 1 && nvl_Certificacion <= 3) {
-                        Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
-                        personas.add(unArbitro);
-                      //  bufferedWriter.write(unArbitro.toString());
-                       // bufferedWriter.newLine();
-                        System.out.println("Árbitro registrado con éxito: " + unArbitro);
-                    } else {
+                    if (nvl_Certificacion < 1 || nvl_Certificacion > 3) {
                         System.out.println("El nivel de certificación debe estar entre 1 y 3.");
+                        continue;
                     }
 
-                  //  bufferedWriter.close();
-                  //  fileWriter.close();
-                    return true;
-                } else if (opcion != -1) {
+                    Persona unArbitro = new Arbitro(id, nombre, apellido, pais, nvl_Certificacion);
+                    personas.add(unArbitro);
 
-                    System.out.println("Ingrese una opción válida");
+                    System.out.println("Árbitro registrado con éxito: " + unArbitro);
+                    return true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Error en el formato de entrada. Por favor, ingrese datos válidos.");
                 }
-                return true;
+            } else if (opcion != -1) {
+                System.out.println("Ingrese una opción válida.");
             }
-       // } catch (IOException e) {
-         //   e.printStackTrace();
-       // }
+        }
         return false;
     }
-    public static boolean modificarPersona(){
+
+    public static boolean modificarPersona() {
         System.out.println("Seleccione un ID de persona que desea modificar");
-        int opcion = Integer.parseInt(entrada.nextLine());
+        int opcion = 0;
+        try {
+            opcion = Integer.parseInt(entrada.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese una opción válida (número entero).");
+            return false;
+        }
+        boolean validacion = false;
+        for (Persona unaPersona : personas) {
+            if (unaPersona.getCi() == opcion) {
+                validacion = true;
 
-        for (Persona unaPersona : personas){
-            if (unaPersona.getCi() == opcion){
-                System.out.println("Ingrese un nuevo nombre: ");
-                String nombre = entrada.nextLine();
+               try {
+                    System.out.println("Ingrese el nombre: ");
+                    String nombre = entrada.nextLine();
 
-                System.out.println("Ingrese un nuevo apellido: ");
-                String apellido = entrada.nextLine();
+                    if (esNumero(nombre)) {
+                        System.out.println("El nombre no puede ser un número.");
+                        continue;
+                    }
+                    if (nombre.trim().isEmpty()) {
+                        System.out.println("El nombre no puede estar vacío.");
+                        continue;
+                    }
 
-                System.out.println("Ingrese un nuevo pais: ");
-                String pais = entrada.nextLine();
+                    System.out.println("Ingrese el apellido:");
+                    String apellido = entrada.nextLine();
 
-                if (unaPersona instanceof Jugador ){
-                    System.out.println("Ingrese un nuevo valor de elo: ");
-                    int elo = Integer.parseInt(entrada.nextLine());
+                    if (esNumero(apellido)) {
+                        System.out.println("El apellido no puede ser un número.");
+                        continue;
+                    }
+                    if (apellido.trim().isEmpty()) {
+                        System.out.println("El apellido no puede estar vacío.");
+                        continue;
+                    }
 
-                    System.out.println("Ingrese una nueva edad: ");
-                    short edad = Short.parseShort(entrada.nextLine());
-                    ((Jugador) unaPersona).setElo(elo);
-                    ((Jugador) unaPersona).setEdad(edad);
-                }else if (unaPersona instanceof Arbitro){
-                    System.out.println("Ingrese un nuevo Nivel de Certificacion: ");
-                    short Nvl_Certificacion = Short.parseShort(entrada.nextLine());
-                    ((Arbitro) unaPersona).setNvl_Certificacion(Nvl_Certificacion);
-                }
+
+                    System.out.println("Ingrese el país: ");
+                    String pais = entrada.nextLine();
+
+                    if (esNumero(pais)) {
+                        System.out.println("El país no puede ser un número.");
+                        continue;
+                    }
+                    if (pais.trim().isEmpty()) {
+                        System.out.println("El país no puede estar vacío.");
+                        continue;
+                    }
+
+                    if (unaPersona instanceof Jugador) {
+                        System.out.println("Ingrese un nuevo valor de elo: ");
+                        int elo = Integer.parseInt(entrada.nextLine());
+
+                        if (elo < 0) {
+                            System.out.println("El valor ELO del jugador debe ser un número positivo o cero.");
+                            continue;
+                        }
+
+                        System.out.println("Ingrese una nueva edad: ");
+                        short edad = -1 ;
+
+                        try{
+                            edad = Short.parseShort(entrada.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Ingrese una edad valida.");
+                            return false;
+                        }
+
+                        ((Jugador) unaPersona).setElo(elo);
+                        ((Jugador) unaPersona).setEdad(edad);
+                    } else if (unaPersona instanceof Arbitro) {
+                        System.out.println("Ingrese un nuevo Nivel de Certificación: ");
+                        short nvl_Certificacion = Short.parseShort(entrada.nextLine());
+
+                        if (nvl_Certificacion < 1 || nvl_Certificacion > 3) {
+                            System.out.println("El nivel de certificación debe estar entre 1 y 3.");
+                            continue;
+                        }
+
+                        ((Arbitro) unaPersona).setNvl_Certificacion(nvl_Certificacion);
+                    }
+
                 unaPersona.setNombre(nombre);
                 unaPersona.setApellido(apellido);
                 unaPersona.setPais(pais);
+            }catch (NumberFormatException e) {
+                System.out.println("Error en el formato de entrada. Por favor, ingrese datos válidos.");
+                return false;
             }
-            System.out.println("Persona modificada: "+unaPersona);
-            return true;
+                System.out.println("Persona modificada: " + unaPersona);
+                return true;
+            }
         }
-        System.out.println("No se encontro persona con ese numero de ID!!");
+        if (validacion){
+            return false;
+        }
+        System.out.println("No se encontró persona con ese número de ID.");
         return false;
     }
     public static void BajaPersona() {
         System.out.println("¿Qué desea eliminar, Jugadores (1) o Árbitro (2)?");
-        short tipo = Short.parseShort(entrada.nextLine());
+        short tipo = 0;
+
+        try {
+            tipo = Short.parseShort(entrada.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese una opción válida (número entero).");
+            return;
+        }
+
         boolean comprobante = false;
 
         if (tipo == 1) {
@@ -434,10 +578,23 @@ public class Main {
     public static void AltaPartida(){
 
         System.out.println("Ingrese el nivel de la partida 1: Regional , 2: Nacional , 3: Internacional ");
-        int idTipo = Integer.parseInt(entrada.nextLine());
+        int idTipo = -1;
+        try{
+            idTipo = Integer.parseInt(entrada.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Ingrese una opcion valida");
+            return;
+        }
+
         if(idTipo < 4 && idTipo > 0){
             System.out.println("Ingrese el ci de el arbitro encargado de la partida");
-            int ciArbitro = Integer.parseInt(entrada.nextLine());
+            int ciArbitro = 0;
+            try{
+                ciArbitro = Integer.parseInt(entrada.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Ingrese una cedula valida");
+                return;
+            }
             for(Persona unaPersona : personas){
                 if(unaPersona instanceof  Jugador){
                     if(unaPersona.getCi() == ciArbitro){
@@ -451,22 +608,31 @@ public class Main {
                             Arbitro unArbitro = ((Arbitro) unaPersona);
 
                             System.out.println("Ingrese el numero la partida");
-                            int idPartida = Integer.parseInt(entrada.nextLine());
+                            int idPartida = -1;
+                                try{
+                                idPartida =Integer.parseInt(entrada.nextLine());
+                                } catch (NumberFormatException e) {
+                                System.out.println("Ingrese un id valido");
+                                return;
+                            }
                             if(!controlIdPartida(idPartida)){
                                 System.out.println("El id de esta partida ya se encuentra registrado");
                                 return;
                             }
                             System.out.println("Ingrese el ci de el jugador");
-                            int ciJugador1 = Integer.parseInt(entrada.nextLine());
+                            int ciJugador1 = -1;
+
+                            try{
+                                ciArbitro = Integer.parseInt(entrada.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("Ingrese una cedula valida");
+                                return;
+                            }
 
                             int ciJugador2;
                             do {
                                 System.out.println("Ingrese el ci del segundo jugador");
                                 ciJugador2 = Integer.parseInt(entrada.nextLine());
-                                if(controlCi(ciJugador2)){
-                                    System.out.println("Este jugador no se encuentra registrado, ingreselo");
-                                    return;
-                                }
                                 if (ciJugador1 == ciJugador2) {
                                     System.out.println("Un jugador no puede jugar contra sí mismo. Por favor, elija dos jugadores diferentes.");
                                 }
@@ -527,6 +693,7 @@ public class Main {
                             Partida unaPartida = new Partida(idPartida,jugadorUno,jugadorDos,unArbitro,fecha,tipo, (Jugador) ganador);
                             partidas.add(unaPartida);
                             System.out.println(unaPartida.toString());
+                            return;
                         }else {
                             System.out.println("El nivel de el arbitro no es suficiente para esta partida");
                         }
@@ -740,8 +907,13 @@ public class Main {
     private static boolean controlCi(int id){
         for(Persona unaPersonaValidacionCi : personas){
             if(unaPersonaValidacionCi.getCi() == id){
+                System.out.println("La cédula de esta persona ya se encuentra registrada");
                 return false;
             }
+        }
+        if (!(String.valueOf(id).length() == 8 && String.valueOf(id).matches("\\d+"))) {
+            System.out.println("La cédula debe contener exactamente 8 números y no debe contener letras.");
+            return false;
         }
         return true;
     }
@@ -845,5 +1017,51 @@ public class Main {
         }
     }
 
+    private static boolean esNumero(String cadena) {
+        try {
+            Integer.parseInt(cadena);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    private static void atribucionDePuntaje() {
+        System.out.println("Ingresar un ID de partida");
+        int idIngresada = Integer.parseInt(entrada.nextLine());
+
+        for (Partida unaPartida : partidas) {
+            if(unaPartida.getGanador() == null){
+                System.out.println("La partida no tiene ningun resultado");
+            }else {
+                if (unaPartida.getId() == idIngresada) {
+                    Jugador ganador = unaPartida.getGanador();
+                    Jugador perdedor;
+
+                    if (ganador == unaPartida.getJugador1()) {
+                        perdedor = unaPartida.getJugador2();
+                    } else {
+                        perdedor = unaPartida.getJugador1();
+                    }
+                    int diferenciaDePuntajes = ganador.getElo() - perdedor.getElo();
+                    int puntajeAtribuido;
+                    if (diferenciaDePuntajes > 0) {
+                        puntajeAtribuido = diferenciaDePuntajes / 4;
+                    } else {
+                        puntajeAtribuido = diferenciaDePuntajes / 8;
+                    }
+                    //Aca le estariamos modificando los nuevos puntajes a cada uno
+                    ganador.setElo(ganador.getElo() - puntajeAtribuido);
+                    perdedor.setElo(perdedor.getElo() + puntajeAtribuido);
+
+                    System.out.println("Puntaje atribuido al ganador: " + puntajeAtribuido);
+                    System.out.println("Nuevo puntaje del ganador: " + ganador.getElo());
+                    System.out.println("Nuevo puntaje del perdedor: " + perdedor.getElo());
+                }
+            }
+        }
+    }
+
+
+//#endregion
 
 }
