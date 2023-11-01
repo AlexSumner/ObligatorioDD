@@ -634,7 +634,7 @@ public class Main {
                             int ciJugador1 = -1;
 
                             try{
-                                ciArbitro = Integer.parseInt(entrada.nextLine());
+                                ciJugador1 = Integer.parseInt(entrada.nextLine());
                             } catch (NumberFormatException e) {
                                 System.out.println("Ingrese una cedula valida");
                                 return;
@@ -683,16 +683,9 @@ public class Main {
                             }
 
 
-                            Jugador jugadorUno = null;
-                            Jugador jugadorDos = null;
-                            for(Persona per : personas){
-                                if(per.getCi() == ciJugador1){
-                                    jugadorUno = ((Jugador) per);
-                                }
-                                if(per.getCi() == ciJugador2){
-                                    jugadorDos = ((Jugador) per);
-                                }
-                            }
+                            Jugador jugadorUno = buscarJugador(ciJugador1);
+                            Jugador jugadorDos = buscarJugador(ciJugador2);
+
                             String tipo = "";
                             if( idTipo == 1){
                                 tipo = "Regional";
