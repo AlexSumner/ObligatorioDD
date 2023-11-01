@@ -593,24 +593,39 @@ public class Main {
             }
         }
     }
-    private static void atribucionDePuntaje(){
+    private static void atribucionDePuntaje() {
         System.out.println("Ingresar un ID de partida");
         int idIngresada = Integer.parseInt(entrada.nextLine());
-        for (Partida unaPartida : partidas){
-            if(unaPartida.getId() == idIngresada){
+
+        for (Partida unaPartida : partidas) {
+            if (unaPartida.getId() == idIngresada) {
                 Jugador ganador = unaPartida.getGanador();
-                if(ganador == unaPartida.getJugador1()){
-                    ganador = unaPartida.getJugador1();
-                   Jugador perdedor = unaPartida.getJugador2();
-                   for (Persona unaPersona : personas){
-                       if(unaPersona instanceof Jugador && unaPersona.getCi() == ganador.getCi()){
-                           ((Jugador) unaPersona).setElo((ganador.getElo() - perdedor.getElo()) / 4);
-                       }
-                   }
-                }else if(ganador == unaPartida.getJugador2()){
-                    ganador = unaPartida.getJugador2();
-                    Jugador perdedor = unaPartida.getJugador1();
+                Jugador perdedor;
+
+                if (ganador == unaPartida.getJugador1()) {
+                    perdedor = unaPartida.getJugador2();
+                } else {
+                    perdedor = unaPartida.getJugador1();
                 }
+
+                // Calcula la diferencia de puntajes
+                int diferenciaDePuntajes = ganador.getElo() - perdedor.getElo();
+
+                // Aplica la fórmula para atribuir puntos
+                int puntajeAtribuido;
+                if (diferenciaDePuntajes > 0) {
+                    puntajeAtribuido = diferenciaDePuntajes / 4;
+                } else {
+                    puntajeAtribuido = diferenciaDePuntajes / 8;
+                }
+
+                // Atribuir puntos al ganador y restarlos al perdedor
+                ganador.setElo(ganador.getElo() + puntajeAtribuido);
+                perdedor.setElo(perdedor.getElo() - puntajeAtribuido);
+
+                System.out.println("Puntaje atribuido al ganador: " + puntajeAtribuido);
+                System.out.println("Nuevo puntaje del ganador: " + ganador.getElo());
+                System.out.println("Nuevo puntaje del perdedor: " + perdedor.getElo());
             }
         }
     }
