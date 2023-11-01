@@ -43,7 +43,8 @@ public class Main {
             System.out.println("12. Mostrar historial del partida y resultado");
             System.out.println("13. Mostrar sueldo para un juez");
             System.out.println("14. Mostrar sueldo para un jugador");
-            System.out.println("15. Cargar archivo txt");
+            System.out.println("15. Atribucion de puntaje");
+            System.out.println("16. Cargar archivo txt");
             opcion = Integer.parseInt(entrada.nextLine());
 
             switch(opcion){
@@ -107,7 +108,11 @@ public class Main {
                     DineroJugador();
                     break;
                 }
-                case 15: {
+                case 15:{
+                    atribucionDePuntaje();
+                    break;
+                }
+                case 16: {
                     guardarArchivos();
                     break;
                 }
@@ -121,7 +126,7 @@ public class Main {
         }
 
     }
-
+    //#region "Archivo TXT"
     public static void importarTxt(){
 
     try (BufferedReader br = new BufferedReader(new FileReader("archivo.txt"))) {
@@ -227,6 +232,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+    //#endregion
     //#region "ABM Persona"
     public static boolean altaPersona() {
         int opcion = 0;
