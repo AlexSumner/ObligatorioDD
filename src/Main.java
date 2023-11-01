@@ -8,8 +8,9 @@ public class Main {
     static Scanner entrada = new Scanner(System.in);
     static ArrayList<Persona> personas = new ArrayList<>();
     static ArrayList<Partida> partidas = new ArrayList<>();
-
     static File miArchivo = new File("archivo.txt");
+
+
     public static void main(String[] args) {
 
 
@@ -625,6 +626,10 @@ public class Main {
                                 System.out.println("El id de esta partida ya se encuentra registrado");
                                 return;
                             }
+                            if (!String.valueOf(idPartida).matches("\\d+")) {
+                                System.out.println("El número de partida no puede contener letras ni caracteres especiales.");
+                                return;
+                            }
                             System.out.println("Ingrese el ci de el jugador");
                             int ciJugador1 = -1;
 
@@ -802,6 +807,7 @@ public class Main {
             System.out.println("No se encuentran Jugadores registrados, ingrese uno");
         }
     }
+
     public static void listarArbitros(){
         boolean validar = false;
         for(Persona unaPersona : personas){
@@ -815,6 +821,7 @@ public class Main {
             System.out.println("No se encuentran Arbitros registrados, ingrese uno");
         }
     }
+
     public static void listaPartidas() {
         boolean validar = false;
         for (Partida partida : partidas) {
@@ -825,6 +832,7 @@ public class Main {
             System.out.println("No se encuentran Partidas registrados, ingrese uno");
         }
     }
+
     private static Partida buscarPartida(int id){
         for (Partida unaPartida : partidas){
             if(unaPartida.getId() == id){
@@ -833,6 +841,7 @@ public class Main {
         }
         return null;
     }
+
     private static Jugador buscarJugador(int ci){
         for(Persona unaPer : personas){
             if(unaPer instanceof Jugador && unaPer.getCi() == ci){
@@ -841,6 +850,7 @@ public class Main {
         }
         return null;
     }
+
     private static Arbitro buscarArbitro(int ci){
         for(Persona unaPer : personas){
             if(unaPer instanceof Arbitro && unaPer.getCi() == ci){
@@ -849,6 +859,7 @@ public class Main {
         }
         return null;
     }
+
     private static void MostrarPartidasJugador(){
 
         System.out.println("Ingrese la cedula de el jugador para ver su historial");
@@ -877,6 +888,7 @@ public class Main {
             System.out.println("No se encontro un jugador ni partidas con ese numero de cédula.");
         }
     }
+
     private static void MostrarPartidasFecha() {
         System.out.println("Ingrese la fecha de la partida en formato 00/00/0000 para ver las partidas jugadas en esa fecha");
         String fechaStr = entrada.nextLine();
@@ -901,6 +913,7 @@ public class Main {
             System.out.println("Fecha ingresada en formato incorrecto. Debe ser 00/00/0000.");
         }
     }
+
     private static void historialDePartidas(){
         System.out.println("Ingrese un ID partida");
         int idPartida = Integer.parseInt(entrada.nextLine());
@@ -910,6 +923,7 @@ public class Main {
             }
         }
     }
+
     private static boolean controlCi(int id){
         for(Persona unaPersonaValidacionCi : personas){
             if(unaPersonaValidacionCi.getCi() == id){
@@ -923,6 +937,7 @@ public class Main {
         }
         return true;
     }
+
     private static boolean controlIdPartida(int id){
         for(Partida PartidasValidacionId : partidas){
             if(PartidasValidacionId.getId() == id){
@@ -931,7 +946,8 @@ public class Main {
         }
         return true;
     }
-    //#endregion
+
+
     public static boolean esFechaValida(String fechaStr) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -954,10 +970,9 @@ public class Main {
         }
         return false;
     }
+
     private static void DineroJuez () {
         try {
-
-
             System.out.println("Ingrese la cedula de identidad de el juez");
 
             int ci = Integer.parseInt(entrada.nextLine());
@@ -987,6 +1002,7 @@ public class Main {
             System.out.println("A ocurrido un error en el codigo: " + e);
         }
     }
+
     private static void DineroJugador () {
         try {
 
