@@ -5,3 +5,4 @@ Registro de Personas:
 12345678,Nahuel,Pages,Uru,21,999999
 Registro de partidas: 
 1,11111111,22222222,33333333,Thu Dec 12 00:00:00 UYT 2222,Internacional,11111111
+2,11111111,12345678,33333333,Thu Dec 12 00:00:00 UYT 2222,Internacional,null

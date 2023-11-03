@@ -178,7 +178,13 @@ public class Main {
                     throw new RuntimeException(e);
                 }
                 String tipoPartida = datos[5];
-                Jugador Ganador = buscarJugador(Integer.parseInt(datos[6]));
+                Jugador Ganador;
+                if(datos[6].equals("null")){
+                    Ganador = null;
+                }else{
+                    Ganador = buscarJugador(Integer.parseInt(datos[6]));
+                }
+
 
 
                 // Crea un objeto Persona y agrégalo al ArrayList
@@ -221,8 +227,13 @@ public class Main {
             bufferedWriter.newLine();
 
             for (Partida partida : partidas) {
-                bufferedWriter.write( partida.getId() + "," + partida.getJugador1().getCi() +  "," + partida.getJugador2().getCi() + "," + partida.getArbitro().getCi() + "," + partida.getFecha() + "," + partida.getTipoPartida() + "," + partida.getGanador().getCi());
-                bufferedWriter.newLine();
+                if( partida.getGanador() == null){
+                    bufferedWriter.write( partida.getId() + "," + partida.getJugador1().getCi() +  "," + partida.getJugador2().getCi() + "," + partida.getArbitro().getCi() + "," + partida.getFecha() + "," + partida.getTipoPartida() + "," + null);
+                    bufferedWriter.newLine();
+                }else{
+                    bufferedWriter.write( partida.getId() + "," + partida.getJugador1().getCi() +  "," + partida.getJugador2().getCi() + "," + partida.getArbitro().getCi() + "," + partida.getFecha() + "," + partida.getTipoPartida() + "," + partida.getGanador().getCi());
+                    bufferedWriter.newLine();
+                }
             }
             // tomar los datos para recrear el objeto partida que va a ir al arrayList
             // puedo tomar los datos de las personas solo con id para luego buscarlos?
